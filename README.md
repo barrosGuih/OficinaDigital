@@ -1,97 +1,47 @@
-<Strong>OficinaDigital</Strong> ⚙️
+<div style="background: #111; color: #fff; padding: 30px; border-radius: 12px; font-family: Arial, sans-serif; max-width: 900px; margin: auto;">
 
-Sistema de gestão para mecânicas e metalúrgicas, com foco em controle de estoque, registros de serviços, pregões e contratos. Ideal para oficinas que querem organizar suas operações de forma prática e visualmente moderna.
+  <h1 style="color: #ff7b00; text-align: center;">System-OficinaDigital 🚗⚙️</h1>
+  
+  <p style="text-align: center; opacity: 0.85;">
+    Sistema de gestão para mecânicas e metalúrgicas, com foco em controle de estoque, registros de serviços, pregões e contratos.
+  </p>
 
-📝 Sobre o Projeto
+  <h2 style="color: #ff7b00;">📝 Sobre o Projeto</h2>
+  <ul>
+    <li>Controle de estoque de peças e produtos</li>
+    <li>Entradas e saídas de produtos</li>
+    <li>Pregões e licitações</li>
+    <li>Serviços realizados</li>
+    <li>Relatórios básicos e faturamento</li>
+  </ul>
 
-O System-OficinaDigital é um sistema web feito em React para o frontend, com foco em simplicidade, responsividade e facilidade de uso.
+  <h2 style="color: #ff7b00;">🎨 Tecnologias Utilizadas</h2>
+  <ul>
+    <li>Frontend: React.js (JSX)</li>
+    <li>Estilos: CSS Modules</li>
+    <li>Ícones: React Icons</li>
+    <li>Controle de versão: Git/GitHub</li>
+  </ul>
 
-O projeto permite gerenciar:
+  <h2 style="color: #ff7b00;">⚙️ Funcionalidades</h2>
+  <ul>
+    <li>Registro de entrada e saída de produtos</li>
+    <li>Controle de estoque com alertas visuais</li>
+    <li>Cadastro e gerenciamento de pregões</li>
+    <li>Registro de serviços realizados</li>
+    <li>Relatórios de movimentação e faturamento</li>
+  </ul>
 
-Estoque de peças e produtos
+  <h2 style="color: #ff7b00;">🚀 Como Rodar o Projeto</h2>
+  <ol>
+    <li>Clone o repositório: <code>git clone https://github.com/SEU-USUARIO/System-OficinaDigital.git</code></li>
+    <li>Instale as dependências: <code>npm install</code></li>
+    <li>Rode o projeto: <code>npm run dev</code></li>
+  </ol>
+  <p>O projeto estará disponível em <code>http://localhost:5173</code> (Vite padrão).</p>
 
-Entradas e saídas de produtos
+  <h2 style="color: #ff7b00;">💡 Contato</h2>
+  <p>Email: <a href="mailto:seuemail@exemplo.com" style="color: #ff7b00;">seuemail@exemplo.com</a><br>
+  GitHub: <a href="https://github.com/SEU-USUARIO" style="color: #ff7b00;">SeuGitHub</a></p>
 
-Pregões e licitações
-
-Serviços realizados
-
-Relatórios básicos e faturamento
-
-O objetivo é digitalizar processos de uma oficina ou metalúrgica, facilitando o controle diário e o acompanhamento de contratos.
-
-🎨 Tecnologias Utilizadas
-
-Frontend: React.js (JSX)
-
-Estilos: CSS Modules (tema laranja + preto)
-
-Ícones: React Icons
-
-Controle de versão: Git/GitHub
-
-Futuras atualizações podem incluir backend em Node.js ou Django, integração com banco de dados e autenticação de usuários.
-
-⚙️ Funcionalidades
-
-Registro de entrada e saída de produtos
-
-Controle de estoque com alertas visuais
-
-Cadastro e gerenciamento de pregões
-
-Registro de serviços realizados
-
-Relatórios de movimentação e faturamento
-
-📂 Estrutura do Projeto
-System-OficinaDigital/
-├─ src/
-│  ├─ components/
-│  │  └─ Home.jsx
-│  ├─ styles/
-│  │  └─ Home.module.css
-│  └─ App.jsx
-├─ public/
-│  └─ index.html
-├─ package.json
-└─ README.md
-
-🚀 Como Rodar o Projeto
-
-Clone o repositório:
-
-git clone https://github.com/SEU-USUARIO/System-OficinaDigital.git
-
-
-Instale as dependências:
-
-npm install
-
-
-Rode o projeto:
-
-npm run dev
-
-
-O projeto estará disponível em http://localhost:5173 (Vite padrão).
-
-🎯 Futuras Funcionalidades
-
-Dashboard completo com gráficos
-
-Autenticação de usuários
-
-Backend e banco de dados persistente
-
-Integração com sistemas de pregões online
-
-Dark/Light mode
-
-💡 Contato
-
-Se você quiser contribuir ou reportar problemas:
-
-Email: seuemail@exemplo.com
-
-GitHub: SeuGitHub
+</div>
