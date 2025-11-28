@@ -1,0 +1,97 @@
+/* reset global (funfa mesmo em CSS Modules) */
+:global(html, body, #root) {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #000; /* opcional: garante fundo preto caso o body antes estivesse branco */
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:global(*), :global(*::before), :global(*::after) {
+  box-sizing: inherit;
+}
+
+/* Home.module.css - tema preto + laranja */
+:root{
+  --ml-orange: #ff7b00;
+  --ml-orange-dark: #e26500;
+  --bg-gradient-start: #0f0f10;
+  --bg-gradient-end: #000;
+  --card: #0b0b0c;
+  --muted: #9aa4af;
+  --text: #ffffff;
+}
+
+.page {
+  width: 100vw;
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #1a1a1a, #000);
+  color: white;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  text-align: center;
+  max-width: 600px;
+}
+
+.title {
+  font-size: 42px;
+  color: #ff7b00;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(255, 123, 0, 0.5);
+}
+
+.subtitle {
+  font-size: 16px;
+  opacity: 0.8;
+  margin-top: 10px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 25px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.card {
+  background: #111;
+  border: 1px solid rgba(255, 123, 0, 0.25);
+  padding: 25px;
+  border-radius: 14px;
+  text-align: center;
+  transition: 0.25s;
+  box-shadow: 0 0 10px rgba(255, 123, 0, 0.15);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: #ff7b00;
+  box-shadow: 0 0 20px rgba(255, 123, 0, 0.4);
+}
+
+.card h3 {
+  margin-top: 12px;
+  margin-bottom: 10px;
+  color: #ff7b00;
+}
+
+.card p {
+  opacity: 0.75;
+  font-size: 14px;
+}
+
+.icon {
+  font-size: 40px;
+  color: #ff7b00;
+  margin-bottom: 10px;
+}
