@@ -1,4 +1,4 @@
-ystem-OficinaDigital 🚗⚙️
+<Strong>OficinaDigital</Strong> ⚙️
 
 Sistema de gestão para mecânicas e metalúrgicas, com foco em controle de estoque, registros de serviços, pregões e contratos. Ideal para oficinas que querem organizar suas operações de forma prática e visualmente moderna.
 
