@@ -41,7 +41,7 @@
   <p>O projeto estará disponível em <code>http://localhost:5173</code> (Vite padrão).</p>
 
   <h2 style="color: #ff7b00;">💡 Contato</h2>
-  <p>Email: <a href="mailto:seuemail@exemplo.com" style="color: #ff7b00;">cunha.barros.guilherme@gmail.com</a><br>
-  GitHub: <a href="https://github.com/SEU-USUARIO" style="color: #ff7b00;">https://github.com/barrosGuih</a></p>
+  <p>Email: <a href="mailto:cunha.barros.guilherme@gmail.com" style="color: #ff7b00;">Email</a><br>
+  GitHub: <a href="https://github.com/barrosGuih" style="color: #ff7b00;">Github</a></p>
 
 </div>
