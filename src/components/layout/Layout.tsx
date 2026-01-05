@@ -30,7 +30,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
     { icon: Car, label: 'Veículos', path: '/vehicles' },
     { icon: Wrench, label: 'Serviços', path: '/services' },
-    { icon: Package, label: 'Peças', path: '/parts' },
+    { icon: Package, label: 'Estoque', path: '/parts' },
     { icon: FileText, label: 'Documentos', path: '/documents' },
     { icon: Gavel, label: 'Pregões', path: '/bids' },
   ];
@@ -66,11 +66,13 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
         <div className="p-4 border-t border-gray-200">
           <div className="flex items-center gap-3 mb-4 px-2">
+             <Link to="/profile" className="flex-shrink-0 transition-transform hover:scale-105">
             <img 
               src={user?.avatar || 'https://via.placeholder.com/40'} 
               alt={user?.name} 
-              className="w-8 h-8 rounded-full bg-gray-200"
+              className="w-8 h-8 rounded-full bg-gray-200 cursor-pointer"
             />
+            </Link>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-900 truncate">{user?.name}</p>
               <p className="text-xs text-gray-500 truncate capitalize">{user?.role}</p>

@@ -9,7 +9,8 @@ import { Vehicles } from './pages/Vehicles';
 import { Services } from './pages/Services';
 import { Parts } from './pages/Parts';
 import { Documents } from './pages/Documents';
-import { Birds } from './pages/Birds'
+import { Birds } from './pages/Birds';
+import { Profile }  from './pages/Profile';
 
 
 console.log("Carregou o APP.TSX");
@@ -41,6 +42,7 @@ function App() {
               <Route path="/parts" element={<Parts />} />
               <Route path="/documents" element={<Documents />} />
               <Route path="/birds" element={<Birds />} />
+              <Route path='/profile' element={<Profile/>} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" replace />} />

@@ -26,7 +26,9 @@ export interface Part {
   category: string;
   quantity: number;
   minQuantity: number;
-  price: number;
+  price: number;         // Este será o PREÇO DE VENDA final
+  purchasePrice: number; // Adicionado: Preço que você pagou
+  markup: number;        // Adicionado: Porcentagem de lucro
   supplier: string;
   location: string;
 }
@@ -44,14 +46,17 @@ export interface Service {
   notes?: string;
 }
 
+// Atualizado para aceitar EXATAMENTE as categorias que usamos no layout
+export type DocumentCategory = 'nfe' | 'contrato' | 'rh' | 'outros';
+
 export interface WorkshopDocument {
   id: string;
   name: string;
   type: string;
   size: number;
-  url: string; // For mock, this might be a data URL or just a placeholder
+  url: string;
   uploadDate: string;
-  category: 'invoice' | 'manual' | 'contract' | 'other';
+  category: DocumentCategory; // Usando o tipo específico acima
 }
 
 export interface BidItem {
@@ -60,7 +65,7 @@ export interface BidItem {
   quantity: number;
   targetPrice: number;
   status: 'open' | 'closed' | 'awarded';
-  matchedInventoryId?: string; // Link to internal inventory
+  matchedInventoryId?: string;
 }
 
 export interface Bid {

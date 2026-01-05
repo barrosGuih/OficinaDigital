@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AutContext';
-import { Button } from '../components/ui/Button';
-import { Input } from '../components/ui/Input';
-import { Wrench, AlertCircle } from 'lucide-react';
+import { Wrench, AlertCircle, Loader2, Lock, Mail } from 'lucide-react';
 
 export const Login: React.FC = () => {
-  const [email, setEmail] = useState('admin@oficina.com');
-  const [password, setPassword] = useState('password'); // Mock password
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -19,60 +18,97 @@ export const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      await login(email);
+      // Agora passamos email e senha reais para o Contexto
+      await login(email, password);
       navigate('/');
-    } catch (err) {
-      setError('Credenciais inválidas. Tente admin@oficina.com');
+    } catch (err: any) {
+      setError(err.message || 'Falha ao conectar ao servidor.');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-xl shadow-lg overflow-hidden">
-        <div className="bg-orange-600 p-8 text-center">
-          <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md">
-            <Wrench className="w-8 h-8 text-orange-600" />
+    <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center p-4">
+      {/* Background decorativo */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-orange-500/5 rounded-full blur-3xl" />
+        <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-orange-500/5 rounded-full blur-3xl" />
+      </div>
+
+      <div className="max-w-md w-full bg-white rounded-[40px] shadow-2xl shadow-orange-900/10 overflow-hidden z-10 border border-white">
+        {/* Banner Superior */}
+        <div className="bg-orange-500 p-10 text-center relative">
+          <div className="w-20 h-20 bg-white rounded-[24px] flex items-center justify-center mx-auto mb-4 shadow-xl rotate-3 hover:rotate-0 transition-transform duration-300">
+            <Wrench className="w-10 h-10 text-orange-500" />
           </div>
-          <h1 className="text-2xl font-bold text-white">Oficina Digital</h1>
-          <p className="text-orange-100 mt-2">Sistema de Gestão Automotiva</p>
+          <h1 className="text-3xl font-black text-white italic tracking-tighter uppercase">Automecânica Leôncio</h1>
+          <p className="text-orange-100 font-bold text-xs uppercase tracking-[0.2em] mt-2 opacity-80">Gestão Digital de Alta Performance</p>
         </div>
 
-        <div className="p-8">
+        <div className="p-10">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm flex items-center gap-2">
-                <AlertCircle className="w-4 h-4" />
-                {error}
+              <div className="bg-red-50 border border-red-100 text-red-600 p-4 rounded-2xl text-sm flex items-center gap-3 animate-shake">
+                <AlertCircle className="w-5 h-5 shrink-0" />
+                <span className="font-bold">{error}</span>
               </div>
             )}
 
-            <Input
-              label="Email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="seu@email.com"
-              required
-            />
+            <div className="space-y-4">
+              <div className="relative group">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4 mb-1 block">Acesso do Usuário</label>
+                <div className="relative">
+                  <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-orange-500 transition-colors" size={20} />
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full pl-14 pr-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-orange-500 outline-none font-bold text-slate-600 transition-all"
+                    placeholder="email@empresa.com"
+                  />
+                </div>
+              </div>
 
-            <Input
-              label="Senha"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-            />
+              <div className="relative group">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4 mb-1 block">Senha Privada</label>
+                <div className="relative">
+                  <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-orange-500 transition-colors" size={20} />
+                  <input
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full pl-14 pr-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-orange-500 outline-none font-bold text-slate-600 transition-all"
+                    placeholder="••••••••"
+                  />
+                </div>
+              </div>
+            </div>
 
-            <Button type="submit" className="w-full" isLoading={isLoading}>
-              Entrar
-            </Button>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-slate-900 hover:bg-orange-500 text-white py-5 rounded-2xl font-black text-lg shadow-xl shadow-slate-200 transition-all active:scale-95 flex items-center justify-center gap-3 disabled:opacity-70 disabled:active:scale-100 group"
+            >
+              {isLoading ? (
+                <Loader2 className="w-6 h-6 animate-spin text-white" />
+              ) : (
+                <>
+                  AUTENTICAR ACESSO
+                  <Wrench className="w-5 h-5 group-hover:rotate-45 transition-transform" />
+                </>
+              )}
+            </button>
 
-            <div className="text-center text-sm text-gray-500">
-              <p>Credenciais de teste:</p>
-              <p>admin@oficina.com / qualquer senha</p>
+            <div className="text-center">
+              <button 
+                type="button"
+                className="text-[10px] font-black text-slate-400 hover:text-orange-500 uppercase tracking-[0.2em] transition-colors"
+              >
+                Esqueci minhas credenciais
+              </button>
             </div>
           </form>
         </div>
