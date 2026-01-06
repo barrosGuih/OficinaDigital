@@ -6,6 +6,19 @@ export interface User {
   avatar?: string;
 }
 
+export interface Service {
+  id: string;
+  vehicleId?: string;    // Fica opcional agora
+  tempPlate?: string; 
+  description: string;
+  mechanicId: string;
+  status: 'pending_approval' | 'pending' | 'in-progress' | 'completed' | 'cancelled';
+  startDate: string;
+  endDate?: string;
+  totalCost: number;
+  notes?: string;
+}
+
 export interface Vehicle {
   id: string;
   plate: string;
@@ -31,19 +44,6 @@ export interface Part {
   markup: number;        // Adicionado: Porcentagem de lucro
   supplier: string;
   location: string;
-}
-
-export interface Service {
-  id: string;
-  vehicleId: string;
-  description: string;
-  mechanicId: string;
-  status: 'pending' | 'in-progress' | 'completed' | 'cancelled';
-  startDate: string;
-  endDate?: string;
-  partsUsed: { partId: string; quantity: number }[];
-  totalCost: number;
-  notes?: string;
 }
 
 // Atualizado para aceitar EXATAMENTE as categorias que usamos no layout

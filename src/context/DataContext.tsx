@@ -1,8 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Vehicle, Part, Service, WorkshopDocument, Bid } from '../types';
+import { io } from 'socket.io-client';
 
-// URL do seu Backend
-const API_URL = 'http://localhost:3333';
+// ⚠️ CERTIFIQUE-SE QUE ESTE IP É O MESMO DO SEU IPCONFIG
+const API_URL = 'http://192.168.100.10:3333'; 
+
+// Inicializa o Socket para tempo real
+const socket = io(API_URL);
 
 interface DataContextType {
   vehicles: Vehicle[];
@@ -19,6 +23,7 @@ interface DataContextType {
   deletePart: (id: string) => Promise<void>;
   addService: (service: Omit<Service, 'id' | 'startDate'>) => Promise<void>;
   updateService: (service: Service) => Promise<void>;
+  approveService: (id: string, totalCost: number) => Promise<void>;
   deleteService: (id: string) => Promise<void>;
   addDocument: (doc: Omit<WorkshopDocument, 'id' | 'uploadDate'>) => Promise<void>;
   deleteDocument: (id: string) => Promise<void>;
@@ -35,12 +40,11 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [bids, setBids] = useState<Bid[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // 1. CARREGAR TODOS OS DADOS DO BANCO AO INICIAR
+  // 1. CARREGAR DADOS INICIAIS E CONFIGURAR OUVINTES EM TEMPO REAL
   useEffect(() => {
     async function loadAllData() {
       try {
         setLoading(true);
-        // Faz todas as chamadas em paralelo para ser mais rápido
         const [resVehicles, resParts, resServices, resDocs] = await Promise.all([
           fetch(`${API_URL}/vehicles`),
           fetch(`${API_URL}/parts`),
@@ -61,6 +65,23 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     loadAllData();
+
+    // --- CONFIGURAÇÃO DO SOCKET (ATUALIZAÇÃO SEM F5) ---
+    
+    // Escuta quando um funcionário envia um novo serviço
+    socket.on("novo-servico-full", (novoServico: Service) => {
+      setServices(prev => [novoServico, ...prev]);
+    });
+
+    // Escuta quando o patrão aprova/altera um serviço
+    socket.on("servico-atualizado", (servicoAtualizado: Service) => {
+      setServices(prev => prev.map(s => s.id === servicoAtualizado.id ? servicoAtualizado : s));
+    });
+
+    return () => {
+      socket.off("novo-servico-full");
+      socket.off("servico-atualizado");
+    };
   }, []);
 
   // --- OPERAÇÕES VEÍCULOS ---
@@ -111,7 +132,9 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(p)
     });
-    if (res.ok) setParts(prev => prev.map(item => item.id === p.id ? p : item));
+    if (res.ok) {
+      setParts(prev => prev.map(item => item.id === p.id ? p : item));
+    }
   };
 
   const deletePart = async (id: string) => {
@@ -126,9 +149,29 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(s)
     });
+    // Nota: A atualização da lista local acontece via Socket (novo-servico-full)
+    // Mas mantemos aqui como segurança se o socket falhar
     if (res.ok) {
       const saved = await res.json();
-      setServices(prev => [saved, ...prev]);
+      setServices(prev => {
+        const exists = prev.find(item => item.id === saved.id);
+        if (exists) return prev;
+        return [saved, ...prev];
+      });
+    }
+  };
+
+  // FUNÇÃO DE APROVAÇÃO (Onde você coloca o preço e finaliza)
+  const approveService = async (id: string, totalCost: number) => {
+    const res = await fetch(`${API_URL}/services/${id}/approve`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ totalCost, status: 'completed' })
+    });
+    
+    if (res.ok) {
+      const updated = await res.json();
+      setServices(prev => prev.map(item => item.id === id ? updated : item));
     }
   };
 
@@ -138,7 +181,9 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(s)
     });
-    if (res.ok) setServices(prev => prev.map(item => item.id === s.id ? s : item));
+    if (res.ok) {
+      setServices(prev => prev.map(item => item.id === s.id ? s : item));
+    }
   };
 
   const deleteService = async (id: string) => {
@@ -164,16 +209,16 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (res.ok) setDocuments(prev => prev.filter(item => item.id !== id));
   };
 
-  // Bids (Lances/Licitações) - Pode manter local por enquanto ou criar rota se precisar
-  const addBid = async (b: Bid) =>{
-    setBids([...bids, b])};
+  const addBid = async (b: Bid) => {
+    setBids([...bids, b]);
+  };
 
   return (
     <DataContext.Provider value={{
       vehicles, parts, services, documents, bids, loading,
       addVehicle, updateVehicle, deleteVehicle,
       addPart, updatePart, deletePart,
-      addService, updateService, deleteService,
+      addService, updateService, approveService, deleteService,
       addDocument, deleteDocument,
       addBid
     }}>
@@ -184,8 +229,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 export const useData = () => {
   const context = useContext(DataContext);
-  if (context === undefined) {
-    throw new Error('useData must be used within a DataProvider');
-  }
+  if (context === undefined) throw new Error('useData must be used within a DataProvider');
   return context;
 };
