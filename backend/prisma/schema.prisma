@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ----------------------------------------------------------------
+// 1. USUÁRIOS (Admin e Funcionários)
+// ----------------------------------------------------------------
+model User {
+  id              String    @id @default(uuid())
+  name            String
+  email           String    @unique
+  password        String
+  role            String    @default("admin") // "admin", "mechanic", "receptionist"
+  avatar          String?
+  
+  // Relacionamento: Um usuário (mecânico) pode criar vários serviços
+  createdServices Service[] @relation("MechanicServices")
+}
+
+// ----------------------------------------------------------------
+// 2. ESTOQUE DE PEÇAS
+// ----------------------------------------------------------------
+model Part {
+  id            String   @id @default(uuid())
+  name          String
+  code          String   @unique
+  category      String
+  quantity      Int
+  minQuantity   Int
+  purchasePrice Float
+  markup        Float
+  price         Float
+  supplier      String
+  location      String
+  createdAt     DateTime @default(now())
+}
+
+// ----------------------------------------------------------------
+// 3. VEÍCULOS
+// ----------------------------------------------------------------
+model Vehicle {
+  id          String    @id @default(uuid())
+  plate       String    @unique
+  model       String
+  brand       String
+  year        Int
+  color       String
+  ownerName   String
+  ownerPhone  String
+  status      String    @default("waiting")
+  createdAt   DateTime  @default(now())
+  
+  // Um veículo pode ter várias ordens de serviço
+  services    Service[]
+}
+
+// ----------------------------------------------------------------
+// 4. SERVIÇOS (Ordens de Serviço)
+// ----------------------------------------------------------------
+model Service {
+  id          String   @id @default(uuid())
+  description String   // Descrição do que foi feito (Ex: Troca de óleo)
+  
+  // Status: pending_approval, pending, in-progress, completed, cancelled
+  status      String   @default("pending_approval")
+  
+  totalCost   Float    @default(0)
+  startDate   DateTime @default(now())
+  endDate     DateTime?
+  notes       String?
+  
+  // Campo para quando o funcionário apenas digita a placa de um carro novo
+  tempPlate   String?
+
+  // Relacionamento com Veículo (Opcional, caso use tempPlate)
+  vehicleId   String?
+  vehicle     Vehicle? @relation(fields: [vehicleId], references: [id])
+
+  // Relacionamento com o Mecânico (User)
+  // Isso resolve o erro de "mechanicId does not exist"
+  mechanicId  String
+  mechanic    User     @relation("MechanicServices", fields: [mechanicId], references: [id])
+}
+
+// ----------------------------------------------------------------
+// 5. DOCUMENTOS DA OFICINA
+// ----------------------------------------------------------------
+model WorkshopDocument {
+  id          String   @id @default(uuid())
+  name        String
+  type        String
+  size        Int
+  url         String
+  category    String
+  uploadDate  DateTime @default(now())
+}
